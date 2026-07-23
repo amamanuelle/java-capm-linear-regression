@@ -37,4 +37,42 @@ public class LinearRegression {
     private void validate(double[] arr) {
         if (arr == null || arr.length == 0) throw new IllegalArgumentException("Array cannot be null or empty");
     }
+
+    public double predict(double x, RegressionResult result) {
+        if (result == null) throw new IllegalArgumentException("Regression result cannot be null");
+        return result.intercept() + result.slope() * x;
+    }
+
+    private double getAverage(double[] arr) {
+        double sum = 0;
+        for (double value : arr) {
+            sum += value;
+        }
+
+        return sum / arr.length;
+    }
+
+    //R^2 = 1 - RSS/TSS
+    public double calculateRSquared(double[] x, double[] y, RegressionResult result) {
+        validate(x);
+        validate(y);
+        if (x.length != y.length) throw new IllegalArgumentException("Arrays must have the same length");
+        if (x.length < 2) throw new IllegalArgumentException("At least two data points are required");
+        if (result == null) throw new IllegalArgumentException("Regression result cannot be null");
+
+        double rss = 0;
+        double tss = 0;
+        double yAvg = getAverage(y);
+        for (int i = 0; i < x.length; i++) {
+            double predicted = predict(x[i], result);
+            double residual = y[i] - predicted;
+            rss += residual * residual;
+
+            double deviation = y[i] - yAvg;
+            tss += deviation * deviation;
+        }
+
+        if (tss == 0) throw new IllegalArgumentException("R-squared cannot be calculated when all y values are equal");
+        return 1 - (rss / tss);
+    }
 }
