@@ -1,5 +1,4 @@
-import org.example.capm.LinearRegression;
-import org.example.capm.RegressionResult;
+package org.example.capm;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
